@@ -8,7 +8,7 @@ def main():
     
     dir = "html/"
     suffix = ".html"
-    filenames=["1_100", "101_200", "201_300", "301_400", "401_500"]
+    filenames=["index", "101_200", "201_300", "301_400", "401_500"]
     
     for i, filename in enumerate(filenames):
         filenames[i] = dir + filename + suffix

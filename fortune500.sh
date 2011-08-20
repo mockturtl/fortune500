@@ -16,25 +16,42 @@ function checkSources {
   fi
 }
 
+#verify files downloaded
+function checkTargets {
+  if [ ! -d $TARGET ]; then
+    echo 'ERROR: Target directory /'$TARGET' does not exist; run -d to download'
+    exit 2
+  fi
+}
+
+#delete files
+function clean {
+  echo 'Cleaning old files...'
+  if [ -d $TARGET ]; then
+    rm -r $TARGET
+  fi
+}
+
 #fetch webpages
 function download {
   
   checkSources
   
-  echo 'Cleaning old files...'
-  rm -r $TARGET
-
+  clean
+  
   local WROOT=http://money.cnn.com/magazines/fortune/fortune500/2011/full_list/
   
   mkdir $TARGET
   echo 'Downloading...'
   wget -nv -i ${SOURCEFILES} -B $WROOT
-  mv index.html 1_100.html  #rename first page for consistency
   mv *.html $TARGET
 }
 
 #remove ignored whitespace
 function parse {  
+  
+  checkTargets
+  
   echo 'Parsing html...'
   ./parse.py
 }
@@ -43,25 +60,17 @@ function parse {
 function extract {
 
   checkSources
-    
+  
   echo 'Exporting revenues to file...'
   rm $REVENUE
   cat $SOURCEFILES | while read LINE; do
-    if [ $LINE = 'index.html' ]; then
-      grep "${TAG1}" $TARGET/1_100.html >> $REVENUE
-    else
-      grep "${TAG1}" $TARGET/$LINE >> $REVENUE
-    fi
+    grep "${TAG1}" $TARGET/$LINE >> $REVENUE
   done
 
   echo 'Exporting profits to file...'
   rm $PROFIT
   cat $SOURCEFILES | while read LINE; do
-    if [ $LINE = 'index.html' ]; then
-      grep "${TAG2}" $TARGET/1_100.html >> $PROFIT
-    else
-      grep "${TAG2}" $TARGET/$LINE >> $PROFIT
-    fi
+    grep "${TAG2}" $TARGET/$LINE >> $PROFIT
   done
 }
 
@@ -98,9 +107,14 @@ ARGC=$#
 i=1
 while [ $i -le $ARGC ]; do
   #echo "Argv[$i] = ${!i}"
-  if [ ${!i} = '-d' ]; then
-    download
-  fi      
+  case ${!i} in 
+    '-d') download
+          ;;
+    '-c') clean
+          echo 'Finished.'
+          exit 0
+          ;;
+  esac    
    i=$((i+1))
 done
 
