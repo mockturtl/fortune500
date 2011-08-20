@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ARGC=$#
+
 TAG1="<td class=\"cnncol3\">"
 TAG2="<td class=\"cnncol4\">"
 
@@ -52,8 +54,18 @@ function parse {
   
   checkTargets
   
+  checkSources
+  
+#  i=0
+#  cat $SOURCEFILES | while read LINE; do
+#    #FILES[${i}]=$LINE
+#    FILES=$FILES' '$LINE
+#    i=$((i+1))
+#    echo $FILES
+#  done
+  
   echo 'Parsing html...'
-  ./parse.py
+  ./parse.py $SOURCEFILES $TARGET
 }
 
 #copy relevant HTML tags to data files, one per line
@@ -103,20 +115,26 @@ function sumAll {
 #  done
 #  shift $(( OPTIND - 1 ))
 
-ARGC=$#
-i=1
-while [ $i -le $ARGC ]; do
-  #echo "Argv[$i] = ${!i}"
-  case ${!i} in 
-    '-d') download
-          ;;
-    '-c') clean
-          echo 'Finished.'
-          exit 0
-          ;;
-  esac    
-   i=$((i+1))
-done
+
+
+function checkArgs {
+  i=1
+  echo 'HI' $ARGC
+  while [ $i -le $ARGC ]; do
+    #echo "Argv[$i] = ${!i}"
+    case ${!i} in 
+      '-d') download
+            ;;
+      '-c') clean
+            echo 'Finished.'
+            exit 0
+            ;;
+    esac    
+    i=$((i+1))
+  done
+}
+
+checkArgs
 
 parse
 extract

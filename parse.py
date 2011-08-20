@@ -3,17 +3,24 @@
 
 """
 
+import sys
+
 def main():
     """Parse the files to remove newline and tab characters."""
     
-    dir = "html/"
-    suffix = ".html"
-    filenames=["index", "101_200", "201_300", "301_400", "401_500"]
+    sourcefiles = sys.argv[1]
+    localDirectory = sys.argv[2] + "/"
     
-    for i, filename in enumerate(filenames):
-        filenames[i] = dir + filename + suffix
+    # construct a list of files to parse
+    file = open(sourcefiles, "r")
+    lines = file.readlines()
+    webpages = []
+    for i, line in enumerate(lines):
+        line = line.strip()
+        webpages.append(localDirectory + line)
+    file.close()
     
-    for filename in filenames:
+    for filename in webpages:
         #print "Parsing file " + filename
         file = open(filename, "r")
         text = file.read()
