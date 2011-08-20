@@ -62,7 +62,7 @@ function sumall {
   ./sum.py
 }
 
-#download
+download
 parse
 extract
 format
