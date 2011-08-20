@@ -115,26 +115,19 @@ function sumAll {
 #  done
 #  shift $(( OPTIND - 1 ))
 
-
-
-function checkArgs {
-  i=1
-  echo 'HI' $ARGC
-  while [ $i -le $ARGC ]; do
-    #echo "Argv[$i] = ${!i}"
-    case ${!i} in 
-      '-d') download
-            ;;
-      '-c') clean
-            echo 'Finished.'
-            exit 0
-            ;;
-    esac    
-    i=$((i+1))
-  done
-}
-
-checkArgs
+i=1  
+while [ $i -le $ARGC ]; do
+  #echo "Argv[$i] = ${!i}"
+  case ${!i} in 
+    '-d') download
+          ;;
+    '-c') clean
+          echo 'Finished.'
+          exit 0
+          ;;
+  esac    
+  i=$((i+1))
+done
 
 parse
 extract
