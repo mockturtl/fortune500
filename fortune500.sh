@@ -56,14 +56,6 @@ function parse {
   
   checkSources
   
-#  i=0
-#  cat $SOURCEFILES | while read LINE; do
-#    #FILES[${i}]=$LINE
-#    FILES=$FILES' '$LINE
-#    i=$((i+1))
-#    echo $FILES
-#  done
-  
   echo 'Parsing html...'
   ./parse.py $SOURCEFILES $TARGET
 }
