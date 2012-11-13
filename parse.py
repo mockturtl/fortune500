@@ -4,6 +4,7 @@
 """
 
 import sys
+import re
 
 def main():
     """Parse the files to remove newline and tab characters."""
@@ -26,6 +27,7 @@ def main():
         text = file.read()
         file.close()
         # whitespace in the HTML, value is indented
+        text = re.sub(r'\<td class=\"cnncol4\"\>\s+', '<td class=\"cnncol4\">', text)
         text = text.replace("<td class=\"cnncol4\">\n\t\t\t\t\t\t", "<td class=\"cnncol4\">")
         # closing tag is indented
         text = text.replace("\n\t\t\t\t\t\t\n\t\t\t\t\t\t</td>", "</td>")
